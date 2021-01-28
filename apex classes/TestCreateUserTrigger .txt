@@ -1,0 +1,23 @@
+@isTest
+public class TestCreateUserTrigger {
+	@isTest(SeeAllData=true)
+    static void func1(){
+        Account acc1 = [select Number_Of_Contacts__c from Account where name='SRK' limit 1];
+        User[] userlist1 = [select Name from User];
+        Contact con = new Contact(firstname='first1', lastname='last1', AccountId=acc1.Id);
+        insert con;
+        System.debug(userlist1.size()+' '+acc1.Number_Of_Contacts__c);
+        Test.startTest();
+        Account acc2 = [select Number_Of_Contacts__c from Account where name='SRK' limit 1];
+        User[] userlist2 = [select Name from User];
+        System.debug(acc1.Number_Of_Contacts__c+' '+acc2.Number_Of_Contacts__c);
+        System.debug(userlist1.size()+' '+userlist1.size());
+        System.assertEquals(acc1.number_Of_Contacts__c+1, acc2.number_Of_Contacts__C);
+        //System.assertEquals(userlist1.size()+1, userlist2.size());
+        Delete con;
+        Account acc3 = [select Number_Of_Contacts__c from Account where name='SRK' limit 1];
+        System.assertEquals(acc1.number_Of_Contacts__c, acc3.number_Of_Contacts__C);
+        Test.stopTest();
+    }
+    
+}

@@ -1,0 +1,60 @@
+trigger createUser on Contact (After insert, before delete) {
+    
+    if(Trigger.isInsert){
+        Contact[] conlist = [select Name, Account.Number_Of_Contacts__c from Contact where Id IN :Trigger.new];
+        Profile profId = [select Id from Profile where name='Standard User' limit 1];
+        Account[] res = new List<Account>();
+        User[] ures = new List<User>();
+        For(Contact con : conlist){
+            System.debug(con.Account);
+            if(con.Account != null){
+                con.Account.Number_Of_Contacts__c += 1;
+                System.debug(con.Account.Number_Of_Contacts__c);
+                res.add(con.Account);
+            }
+            String orgId = UserInfo.getOrganizationId();
+            String dateString = String.valueof(Datetime.now()).replace(' ','').replace(':','').replace('-','');
+            Integer randomInt = Integer.valueOf(math.rint(math.random()*1000000));
+            String uniqueName = orgId + dateString + randomInt;
+            if(uniqueName.length()>51)
+            {
+                uniqueName=uniqueName.substring(0,51);
+            }
+            User tuser = new User( firstname = uniqueName,
+                                  lastName = uniqueName,
+                                  email = uniqueName + '@test' + orgId + '.org',
+                                  Username = uniqueName + '@test' + orgId + '.org',
+                                  Alias = uniqueName.substring(18, 23),
+                                  TimeZoneSidKey = 'America/Los_Angeles',
+                                  LocaleSidKey = 'en_US',
+                                  LanguageLocaleKey = 'en_US',
+                                  ProfileId = profId.Id,
+                                  contactId = con.Id);
+            System.debug(tuser);
+            ures.add(tuser);
+            }
+        Database.update(res, false);
+        Database.insert(ures, false);
+    }
+    else if(Trigger.isDelete){
+        Contact[] conlist = [select Name, Account.Number_Of_Contacts__c from Contact where Id IN :Trigger.old];
+        Account[] res = new List<Account>();
+        User[] ures = new List<User>();
+        System.debug(conlist);
+        For(Contact con : conlist){
+            System.debug(con.Account);
+            if(con.Account != null){
+                con.Account.Number_Of_Contacts__c -= 1;
+                System.debug(   con.Account.Number_Of_Contacts__c);
+                res.add(con.Account);
+            }
+            User[] usr = [select Name from User where contactId = :con.Id];
+            for(User u : usr){
+                u.isActive = false;
+                ures.add(u);
+            }
+        }
+        Database.update(res);
+        Database.update(ures);
+    }
+}

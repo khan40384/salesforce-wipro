@@ -1,0 +1,43 @@
+@isTest
+public class TestRelatedContactedEmail {
+	@isTest(SeeAllData=true)
+    static void func1(){
+        Test.startTest();
+        Account acc1 = [select related_email__c from Account where name='SRK' limit 1];
+        String[] emails1 = acc1.related_email__c.split(',');
+        Contact con = new Contact(firstname='ab', lastname='cd', email='sb@gmail.com', AccountId=acc1.Id);
+        Insert con;
+        Account acc2 = [select related_email__c from Account where Id =: acc1.Id];
+        String[] emails2 = acc2.related_email__c.split(',');
+        System.assertEquals(emails1.size()+1, emails2.size());
+        Test.stopTest();
+    }
+    
+    @isTest(SeeAllData=true)
+    static void func2(){
+        Test.startTest();
+        Account acc1 = [select related_email__c from Account where name='SRK' limit 1];
+        String[] emails1 = acc1.related_email__c.split(',');
+        Contact con = [select AccountId from Contact where AccountId =: acc1.Id limit 1];
+        con.AccountId = null;
+        Update con;
+        Account acc2 = [select related_email__c from Account where Id =: acc1.Id];
+        String[] emails2 = acc2.related_email__c.split(',');
+        System.assertEquals(emails1.size()-1, emails2.size());
+        Test.stopTest();
+    }
+    
+    @isTest(SeeAllData=true)
+    static void func3(){
+        Test.startTest();
+        Account acc1 = [select related_email__c from Account where name='SRK' limit 1];
+        String[] emails1 = acc1.related_email__c.split(',');
+        Contact con = [select AccountId from Contact where AccountId =: acc1.Id limit 1];
+        Delete con;
+        Account acc2 = [select related_email__c from Account where Id = :acc1.Id];
+        String[] emails2 = acc2.related_email__c.split(',');
+        System.assertEquals(emails1.size()-1, emails2.size());
+        Test.stopTest();
+    }
+    
+}

@@ -1,0 +1,19 @@
+@isTest
+public class TestSendMailController {
+    @isTest(seeAllData=true)
+    static void func1(){
+        Test.startTest();
+        sendMailController obj = new sendMailController();
+        System.PageReference val = obj.sendMail('SRK');
+        System.assertEquals(null, val);
+        Test.stopTest();
+    }
+   @isTest(seeAllData=true)
+    static void func2(){
+        Test.startTest();
+        sendMailController obj = new sendMailController();
+        System.PageReference val = obj.sendMail('s1');
+        System.assertEquals(null, val);
+        Test.stopTest();
+    }  
+}

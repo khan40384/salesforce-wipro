@@ -1,0 +1,63 @@
+trigger RelatedContactEmail on Contact (After insert, After delete, After update)
+{
+    Set<Id> accountIds= new Set<Id>();
+    if(trigger.isInsert)
+    {   
+        List<Contact> conList= [select id,email,accountId from Contact where id in :Trigger.new ];
+        for(Contact con:conList)
+        {
+            if(con.accountId!= null){
+            	accountIds.add(con.accountId);  
+            }
+        }
+    } 
+	if(trigger.isUpdate)
+    {
+     for(Contact newcon:Trigger.new)
+     {
+        Contact oldcon=trigger.oldMap.get(newcon.Id);
+        if(oldcon.accountId!=newcon.accountId)
+        {
+            accountIds.add(oldcon.AccountId);
+            accountIds.add(newcon.AccountId);
+            
+        }
+     }
+    } 
+    if(Trigger.isDelete)
+    {
+        for(Contact con:Trigger.old)
+        {
+            if(con.accountId!=null){
+            	accountIds.add(con.accountId);
+            }
+        }   
+	}
+   
+	List<Account> acclist = [select name, related_email__c,(select email from contacts) from Account where Id in :accountIds];
+	List<Account> res = new List<Account>();
+    System.debug('size '+accountIds.size());
+    for(Account acc : acclist){
+        Contact[] conlist = acc.contacts;
+        if(!conlist.isEmpty()){
+            Integer i;
+            String str;
+            for(i=0; i<conlist.size(); i++){
+                if(conlist[i].email!=null){
+                    str = conlist[i].email;
+                    i++;
+                    break;
+                }
+            }
+            for(; i<conlist.size(); i++){
+                if(conlist[i].email!=null){
+                    str += ','+conlist[i].email;
+                }
+            }
+            System.debug(str);
+            acc.related_email__c = str;
+            res.add(acc);
+        }
+     } 
+     update res; 
+}

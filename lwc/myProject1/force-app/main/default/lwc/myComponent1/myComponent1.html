@@ -1,0 +1,61 @@
+<template>
+    <lightning-card title="Account List" icon-name="custom:custom63">
+        <div class="slds-m-around_medium">
+            <template if:true={accounts}>
+                <table>
+                    <thead style="border: solid 1px">
+                        <tr >
+                            <th id="name">
+                                <p>Account Name</p>
+                            </th>
+                           <th id="contacts">
+                               <p>Contacts</p>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={accounts} for:item="acc">
+                            <tr style="border: solid 1px" key={acc.Id}>
+                                <td key = {acc.Id}>
+                                    <h5>{acc.Name} </h5>
+                                </td>
+                                <td  >
+
+                                        <lightning-button-menu
+                                              alternative-text="Action"
+                                              onselect={handleMenuSelect}>
+                                      
+                                          <template for:each={acc.Contacts} for:item="con">
+                                              <lightning-menu-item
+                                                  id={con.Id}
+                                                  label={con.Name}
+                                                  value={con.Name}
+                                                  key={con.Name}>
+                                              </lightning-menu-item>
+                                          </template>
+                                      
+                                        </lightning-button-menu>
+                                      
+                                </td>
+                                <td>
+                                    <lightning-input id={acc.Id} type="checkbox" onchange={handleChange} name="input1"></lightning-input>
+                                </td>
+                                    <td>
+                                      <div style="display: flex; justify-content: center;">
+                                        <lightning-button name={acc.Id} style="display: none;" variant="edit" label="Edit" title="Primary action" onclick={navigateToAccountPage} class="slds-m-left_x-small" value={acc.Id}></lightning-button>
+                                        <lightning-button name={acc.Id} style="display: none;" variant="delete" label="Delete" title="Primary action" onclick={deleteAccountRecord} class="slds-m-left_x-small"></lightning-button>
+                                      </div>
+                                    </td>
+                            </tr>
+                            
+                        </template>
+                    </tbody>
+                </table>
+                
+            </template>
+            <template if:true={accounts.error}>
+                {accounts.error}
+            </template>
+        </div>
+    </lightning-card>
+</template>
