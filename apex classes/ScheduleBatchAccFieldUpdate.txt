@@ -1,0 +1,7 @@
+global class ScheduleBatchAccFieldUpdate implements Schedulable {
+  global void execute(SchedulableContext sc)
+    {
+        AccountBatch ba =new AccountBatch();
+        Database.executeBatch(ba);
+    }
+}

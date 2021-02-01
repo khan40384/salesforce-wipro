@@ -1,0 +1,27 @@
+global class Batch_AddConToAcc implements Database.Batchable <sObject> {
+    
+    List<contact> lstCon = new List<Contact>();
+    
+    global Database.QueryLocator start(Database.BatchableContext bc) {
+        String query = 'SELECT Id, Name FROM Account WHERE Id NOT IN(SELECT AccountId FROM Contact)';
+        return Database.getQueryLocator(query);
+    }
+    
+    global void execute(Database.BatchableContext bc,List<Account> batch) {
+        Integer i=0;
+        for (Account a : batch) {
+            i++;
+            Contact c =  new Contact();
+            c.LastName = a.Name;
+            c.AccountId = a.Id;
+            c.Username__c='test'+i+'@gmail.com';
+            c.Lastname__c=a.Name;
+            lstCon.add(c);
+        }
+        INSERT lstCon;
+    }
+    
+    global void finish(Database.BatchableContext bc) {
+        //Do Nothing.
+    }
+}

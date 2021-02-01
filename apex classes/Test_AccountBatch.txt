@@ -1,0 +1,25 @@
+@isTest
+private class Test_AccountBatch {
+
+static testmethod void test() {
+
+// Create test accounts to be updated
+// by the batch job.
+
+List<Account> accList=new List<Account>();
+for (Integer i=0;i<200;i++) {
+Account m = new Account(Name = 'Account ' + i);
+accList.add(m);
+}
+insert accList;
+
+Test.startTest();
+AccountBatch c = new AccountBatch();
+Database.executeBatch(c);
+Test.stopTest();
+
+// Verify accounts updated
+Account[] accUpdatedList = [SELECT Id,Name FROM Account];
+System.assert(accUpdatedList[0].Name.Contains('Testing'));
+}
+}

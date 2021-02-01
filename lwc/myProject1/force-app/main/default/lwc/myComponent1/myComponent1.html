@@ -17,7 +17,14 @@
                         <template for:each={accounts} for:item="acc">
                             <tr style="border: solid 1px" key={acc.Id}>
                                 <td key = {acc.Id}>
-                                    <h5>{acc.Name} </h5>
+                                    <lightning-accordion allow-multiple-sections-open
+                                        onsectiontoggle={handleSectionToggle}
+                                        active-section-name={activeSections}
+                                        key={acc.Id}>
+                                    <lightning-accordion-section name="A" key={acc.Id} label={acc.Name}>
+                                        <c-my-component3 id={acc.Id}></c-my-component3>
+                                     
+                                    </lightning-accordion-section></lightning-accordion>
                                 </td>
                                 <td  >
 

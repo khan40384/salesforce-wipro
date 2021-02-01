@@ -1,0 +1,7 @@
+global class SchedulableBatch_AddConToAcc implements Schedulable {
+ global void execute(SchedulableContext sc)
+    {
+       Batch_AddConToAcc  ba =new Batch_AddConToAcc ();
+        Database.executeBatch(ba);
+    }
+}

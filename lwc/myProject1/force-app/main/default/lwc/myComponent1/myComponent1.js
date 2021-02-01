@@ -1,20 +1,56 @@
-import { LightningElement , wire} from 'lwc';
+import { LightningElement , wire, track, api} from 'lwc';
 import GetAllAccounts from '@salesforce/apex/GetAccounts.GetAllAccounts';
 import { NavigationMixin } from 'lightning/navigation';
 import { deleteRecord } from 'lightning/uiRecordApi';
 import { refreshApex } from '@salesforce/apex';
 
+
+
+
 export default class MyComponent1 extends LightningElement {
+    
+
+
+    contacts=[];
     accounts=[];
     IdValues={};
     @wire(GetAllAccounts) wiredAccounts({ error, data }) {
         if (data) {
             console.log(data);
-            this.accounts = data;
+            this.accounts = JSON.parse(JSON.stringify(data));
+            // data.forEach(row=>{
+            //     let obj1={};
+            //     for(var key in row){
+            //         obj1[key] = row[key];
+            //     }
+            //     this.accounts.push(obj1);
+            //     row.Contacts.forEach(trow=>{
+            //         let obj2={};
+            //         for(var key in trow){
+            //             obj2[key] = trow[key];
+            //         }
+            //         this.contacts.push(obj2);
+            //     })
+            //})
         } else if (error) {
             console.log(error);
         }
     }
+
+    handleSectionToggle(event) {
+        console.log(event.target.getAttribute('key'));
+        const openSections = event.detail.openSections;
+
+        if (openSections.length === 0) {
+            this.activeSectionsMessage = 'All sections are closed';
+        } else {
+            this.activeSectionsMessage =
+                'Open sections: ' + openSections.join(', ');
+        }}
+
+
+    
+
     handleChange(event){
         console.log(event.target.checked);
         let checked = event.target.checked;

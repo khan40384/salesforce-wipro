@@ -1,0 +1,11 @@
+<template>
+    <template if:true={contacts}>
+    <template for:each={data} for:item="con">
+     <h4 style="margin-left: 5px;" key={con.Id}>{con.Name }</h4>
+    </template>
+    <div style="display: flex; justify-content: center;">
+        <lightning-button variant="edit" label="Previous" title="Primary action" onclick={previousHandler} class="slds-m-left_x-small"></lightning-button>
+        <lightning-button variant="delete" label="Next" title="Primary action" onclick={nextHandler} class="slds-m-left_x-small"></lightning-button>
+      </div>
+</template>
+</template>
