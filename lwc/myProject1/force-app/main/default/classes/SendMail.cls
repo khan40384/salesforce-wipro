@@ -31,26 +31,15 @@ public with sharing class SendMail {
     @AuraEnabled(cacheable=true)
     public static String Send(String accid) {
         Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage(); 
-        System.debug(accid);
-        Account acc = [select Id,related_email__c, (select email from contacts) from Account where Id=:accid];
-        System.debug(acc);
+        
+        Account acc = [select Id,related_email__c, (select email from contacts) from Account where Id=:accid limit 1];
         String addresses = acc.related_email__c;
             
-        String theTemplate = [SELECT Id FROM EmailTemplate WHERE name = 'template1'].Id;
-        System.debug(theTemplate);
+ 
                 String[] toAddresses = addresses.split(',');
-                String[] arr= new List<String>();
-                String str='';
-                if(toAddresses.size()>0){
-                    str = toAddresses[0];
-                }
-                for(Integer i=1; i<toAddresses.size(); i++){
-                    str = str+';'+toAddresses[i];
-                }
-                arr.add(str);
-                email.setTemplateID(theTemplate);
+                
                 email.setSubject( 'Sending from lwc' );
-                email.setToAddresses( toAddresses  );
+                email.setToAddresses( toAddresses );
                 email.setPlainTextBody( 'hii All!!!' );
                 
                 Messaging.SendEmailResult [] r = 
@@ -66,4 +55,18 @@ public with sharing class SendMail {
                 }
         return result;
     }
+
+
+    @AuraEnabled(cacheable=true)
+       public static void SendMailMethod(String mMail ,String mSubject ,String mbody, String cc){
+       System.debug(mMail);
+       Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage(); 
+               email.setSubject( mSubject );
+               email.setToAddresses( new String[]{mMail} );
+               email.setPlainTextBody( 'k' );
+               //email.setCcAddresses(new String[]{cc});
+               Messaging.sendEmail(new Messaging.SingleEmailMessage[] {email});  
+               
+      }
 }
+

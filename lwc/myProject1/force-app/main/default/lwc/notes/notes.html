@@ -1,0 +1,79 @@
+<template>
+    <div if:false={notesExist} class="slds-card__header slds-grid slds-page-header">
+      <header class="slds-media slds-media_center slds-has-flexi-truncate ">
+        <div class="slds-media__figure">
+          <span class="slds-icon_container slds-icon-standard-note" title="note">
+            <img src={noteIcon} alt="Notes" title="Notes" />
+            <span class="slds-assistive-text">Notes</span>
+          </span>
+        </div>
+        <div class="slds-media__body">
+          <h2 class="slds-card__header-title">
+            <a href="javascript:void(0);" class="slds-card__header-link slds-truncate" title="Notes">
+              <span class="slds-card__header-title ">Notes ({notesCount})</span>
+            </a>
+          </h2>
+        </div>
+      </header>
+      <div class="slds-col_bump-right slds-grid slds-grid_vertical-align-center">
+        <button class="slds-button slds-button_neutral" onclick={handleNewNote}>New</button>
+      </div>
+    </div>
+    <article if:true={notesExist} class="slds-card">
+      <!-- Notes Header -->
+      <div class="slds-card__header slds-grid slds-page-header">
+        <header class="slds-media slds-media_center slds-has-flexi-truncate ">
+          <div class="slds-media__figure">
+            <span class="slds-icon_container slds-icon-standard-note" title="note">
+              <img src={noteIcon} alt="Notes" title="Notes" />
+              <span class="slds-assistive-text">Notes</span>
+            </span>
+          </div>
+          <div class="slds-media__body">
+            <h2 class="slds-card__header-title">
+              <a href="javascript:void(0);" class="slds-card__header-link slds-truncate" title="Notes">
+                <span class="slds-card__header-title ">Notes ({notesCount})</span>
+              </a>
+            </h2>
+          </div>
+        </header>
+        <div class="slds-col_bump-right slds-grid slds-grid_vertical-align-center">
+          <button class="slds-button slds-button_neutral" onclick={handleNewNote}>New</button>
+        </div>
+      </div>
+      <!-- Notes Body -->
+      <div class="slds-card_body slds-card_body_inner">
+        <template if:true={notes} for:each={notes} for:item="note">
+          <!-- A Note -->
+          <div key={note.Title} if:true={error}>There was an error: {error}</div>
+          <div class="slds-m-vertical_medium slds-text-body_regular" key={note.Title}>
+            <div class="slds-text-link" data-id={note.Id} onclick={handleNoteClicked}>{note.Title}</div>
+            <div class="note-date">
+              <lightning-formatted-date-time value={note.ContentModifiedDate} year="numeric" month="numeric" day="numeric"
+                hour="2-digit" minute="2-digit" hour12="true"></lightning-formatted-date-time>&nbsp;by&nbsp;
+              <span class="slds-text-link"><a href={note.LastModifiedByURL}>{note.LastModifiedByName}</a></span>
+            </div>
+            <div class="notes-wrap">{note.TextPreview}</div>
+          </div>
+        </template>
+      </div>
+      <!-- Notes Footer -->
+      <footer class="slds-card__footer">
+        <div>
+          <!--<p><a class="slds-card__footer-action" href={viewAllLink}>View All
+          <span class="slds-assistive-text">Accounts</span>
+        </a></p>-->
+        <!--<p><a class="slds-card__footer-action" href="javascript:void(0);" onclick={handleNavigateViewAll}>View All
+          <span class="slds-assistive-text">Accounts</span>
+        </a></p>-->
+        <lightning-button variant="base" label="View All" title="View All" onclick={handleNavigateViewAll} class="slds-m-left_x-small"></lightning-button>
+      </div>
+      </footer>   
+    </article>
+    <br>
+    <c-note-taker editor-status={editorStatus} note-id={selectedNote.Id} note-title={selectedNote.Title}
+      note-content={selectedNote.Content} note-created-name={selectedNote.CreatedByName}
+      note-created-date={selectedNote.CreatedDate} note-created-url={selectedNote.CreatedByURL}
+      record-id={recordId}>
+    </c-note-taker>
+  </template>

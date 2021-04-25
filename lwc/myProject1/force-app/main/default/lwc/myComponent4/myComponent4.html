@@ -1,0 +1,58 @@
+<template>
+    <lightning-tabset>
+        <lightning-tab label="Accounts">
+            <lightning-card title="Update Records" icon-name="custom:custom63">
+                <div class="slds-m-around_medium">
+                    <template if:true={accounts.data}>
+                        <lightning-datatable
+                            key-field="Id"
+                            data={accounts.data}
+                            columns={accColumns}
+                            onsave={handleSaveAccounts}
+                            draft-values={draftValues}>
+                        </lightning-datatable>
+                    </template>
+                    <template if:true={accounts.error}>
+                        <!-- handle Apex error -->
+                    </template>
+                </div>
+            </lightning-card>
+        </lightning-tab>
+            <lightning-tab label="Contacts">
+                <lightning-card title="Datatable Example" icon-name="custom:custom63">
+                    <div class="slds-m-around_medium">
+                        <template if:true={contacts.data}>
+                            <lightning-datatable
+                                key-field="Id"
+                                data={contacts.data}
+                                columns={conColumns}
+                                onsave={handleSaveContacts}
+                                draft-values={draftValues}>
+                            </lightning-datatable>
+                        </template>
+                        <template if:true={contacts.error}>
+                            <!-- handle Apex error -->
+                        </template>
+                    </div>
+                </lightning-card>
+            </lightning-tab>
+            <lightning-tab label="Opportunities">
+                <lightning-card title="Datatable Example" icon-name="custom:custom63">
+                    <div class="slds-m-around_medium">
+                        <template if:true={opportunities.data}>
+                            <lightning-datatable
+                                key-field="Id"
+                                data={opportunities.data}
+                                columns={oppColumns}
+                                onsave={handleSaveOpportunities}
+                                draft-values={draftValues}>
+                            </lightning-datatable>
+                        </template>
+                        <template if:true={opportunities.error}>
+                            <!-- handle Apex error -->
+                        </template>
+                    </div>
+                </lightning-card>
+            </lightning-tab>
+    </lightning-tabset>
+</template>

@@ -1,0 +1,61 @@
+<template>
+    <div class="lwc-container">
+      <div class="slds-docked_container">
+        <section class="slds-docked-composer slds-grid slds-grid_vertical slds-is-closed slds-transition-hide"
+          role="dialog" aria-labelledby="dialog-heading-id-1" aria-describedby="dialog-content-id-1">
+          <header class="slds-docked-composer__header slds-grid slds-shrink-none" onclick={toggleMinimizeModal}
+            aria-live="assertive">
+            <div class="slds-media slds-media_center slds-no-space">
+              <div class="slds-media__figure slds-m-right_x-small">
+                <span class="slds-icon_container">
+                  <img src={notebookIcon} alt="Notes" title="Notes" />
+                </span>
+              </div>
+              <div class="slds-media__body">
+                <h2 class="slds-truncate" id="dialog-heading-id-1" title={noteTitle}>{noteTitle}</h2>
+              </div>
+            </div>
+            <div class="slds-col_bump-left slds-shrink-none">
+              <button class="slds-button slds-button_icon slds-button_icon" onclick={toggleMinimizeModal}
+                title="Minimize window">
+                <img src={minimizeIcon} alt="Minimize Editor" title="Minimize Editor" />
+                <span class="slds-assistive-text">Minimize Composer Panel</span>
+              </button>
+              <button class="slds-button slds-button_icon slds-button_icon" title="Close" onclick={handleExit}>
+                <img src={exitIcon} alt="Exit Editor" title="Exit Editor" />
+                <span class="slds-assistive-text">Close Composer Panel</span>
+              </button>
+            </div>
+          </header>
+          <div class="slds-docked-composer__body" id="dialog-content-id-1">
+            <div class="slds-email-composer">
+              <div class="slds-form-element">
+                <label class="slds-form-element__label slds-assistive-text" for="input-subject-01">{noteTitle}</label>
+                <div class="slds-form-element__control">
+                  <input type="text" id="input-subject-01"
+                    class="slds-input slds-input_bare slds-p-vertical_small slds-text-heading_small"
+                    placeholder="Untitled Note" value={noteTitle} oninput={handleTitleChange} />
+                </div>
+              </div>
+              <lightning-input-rich-text placeholder="Enter your note..." formats={formats} class="notes-rich-text-editor"
+                value={noteContent} oninput={handleNoteEdited}>
+              </lightning-input-rich-text>
+              <div if:true={noteCreatedName} class="note-date">Created&nbsp;
+                <lightning-formatted-date-time value={noteCreatedDate} year="numeric" month="numeric" day="numeric"
+                  hour="2-digit" minute="2-digit" hour12="true"></lightning-formatted-date-time>
+                &nbsp;by&nbsp;
+                <span class="slds-text-link"><a href={noteCreatedUrl}>{noteCreatedName}</a></span>
+              </div>
+            </div>
+          </div>
+          <footer class="slds-docked-composer__footer slds-shrink-none">
+            <button class="slds-button slds-button_neutral" onclick={handleDelete}>Delete</button>
+            <div class="slds-col_bump-left slds-grid slds-grid_vertical-align-center">
+              <button data-id="saveAndCloseButton" class="slds-button slds-button_brand" onclick={handleSave}>Save and
+                Close</button>
+            </div>
+          </footer>
+        </section>
+      </div>
+    </div>
+  </template>

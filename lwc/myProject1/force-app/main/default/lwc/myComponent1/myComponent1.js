@@ -7,7 +7,7 @@ import { refreshApex } from '@salesforce/apex';
 
 
 
-export default class MyComponent1 extends LightningElement {
+export default class MyComponent1 extends NavigationMixin(LightningElement) {
     
 
 

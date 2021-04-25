@@ -1,0 +1,21 @@
+<template>
+    <lightning-card  variant="Narrow"  title="Quotes" icon-name="standard:case">
+        <lightning-button  variant="brand" label="New" title="New" centre onclick={handleClick} class="slds-align_absolute-center" slot="actions"></lightning-button>
+        
+
+        <div class="slds-p-horizontal_small">
+            <lightning-datatable
+                key-field="id"
+                data={result}
+                
+                hide-checkbox-column
+                columns={columnsList}
+                onrowaction={handleRowAction}>
+            </lightning-datatable>
+        </div>
+        <div slot="footer">
+            <lightning-button  variant="base" label="View All" title="View All" centre onclick={navigateToAccountPage} class="slds-align_absolute-center"></lightning-button>
+        </div>
+    </lightning-card>
+    
+</template>
